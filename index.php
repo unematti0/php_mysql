@@ -11,20 +11,72 @@
     <div class="container">
         <h1>HKHK spordipäev 2025</h1>
 
+    <?php
+                if (isset($_GET["muuda"]) && isset($_GET["id"])){
+                    $id = $_GET["id"];
+                    $kuva_paring = "SELECT * FROM spot2025 WHERE id = " .$id."";
+                    $saada_paring = mysqli_query($yhendus, $kuva_paring);
+                    $rida = mysqli_fetch_assoc($saada_paring);
+                    
+                }
+
+
+                if (isset($_GET["salvesta_muudatused"]) && isset($_GET["id"])){
+                    $id = $_GET["id"];
+                    $fullname = $_GET["fullname"];
+                    $email = $_GET["email"];
+                    $age = $_GET["age"];
+                    $gender = $_GET["gender"];
+                    $ala = $_GET["category"];
+
+                    $muuda_paring = "UPDATE spot2025 SET fullname='$fullname', email='$email', age='$age', gender='$gender', category='$ala' WHERE id = " .$id."";
+                    
+                    $saada_paring = mysqli_query($yhendus, $muuda_paring);
+                    $tulemus = mysqli_affected_rows($yhendus);
+                    if ($tulemus == 1) {
+                        header("Location: index.php?msg=andmed muudetud!");
+                    } else {
+                        echo "<div class='alert alert-danger'>andmed ei muutunud</div>";
+                    }
+
+
+                }
+    ?>
+
+    
+
+     
         <form action="index.php" method="get" class="py-4">
-            Nimi: <input type="text" name="fullname" require><br>
-            E-mail: <input type="email" name="email"><br>
-            Vanus: <input type="number" name="age" min="16" max="88" step="1"><br>
-            sugu: <input type="text" name="gender" limit= "5"><br>
-            spordiala: <input type="text" name="category" limit="20"><br>
-            <input type="submit" value="salvesta" class="btn btn-primary"><br>
+            <input type="number" name="id" hidden
+            value="<?php !empty ($rida['id']) ? print_r($rida['id']): ''?>"><br>
+            Nimi: <input type="text" name="fullname" required
+            value="<?php !empty ($rida['fullname']) ? print_r($rida['fullname']): ''?>"><br>
+            E-mail: <input type="email" name="email"
+            value ="<?php !empty ($rida['email']) ? print_r($rida['email']): ''?>"><br>
+            Vanus: <input type="number" name="age" min="16" max="88" step="1"
+            value ="<?php !empty ($rida['age']) ? print_r($rida['age']): ''?>"><br>
+            sugu: <input type="text" name="gender" 
+            value ="<?php !empty ($rida['gender']) ? print_r($rida['gender']): ''?>"><br>
+            spordiala: <input type="text" name="category" 
+            value ="<?php !empty ($rida['category']) ? print_r($rida['category']): ''?>"><br>
+            <?php if (isset($_GET["muuda"]) && isset($_GET["id"])){ ?>
+            <input type="submit" value="salvesta_muudatused" name="salvesta_muudatused" class= "btn btn-success"><br>
+            <?php }else { ?>
+            <input type="submit" value="salvesta" name="salvesta" class="btn btn-primary"><br>
+            <?php } ?>
+            
              
         </form>
 
         <?php
-             if (isset($_GET["fullname"]) && !empty($_GET["fullname"])) {
+             if (isset($_GET["salvesta"]) && !empty($_GET["fullname"])){
+                $fullname = $_GET["fullname"];
+                $email = $_GET["email"];
+                $age = $_GET["age"];
+                $gender = $_GET["gender"];
+                $ala = $_GET["category"];
                 $lisa_paring = "INSERT INTO spot2025 (fullname, email, age, gender, category)
-                VALUES ('mattias elmers', 'mattias.elmers@gmail.com', '18', 'mees', 'jalgpall')";
+                VALUES ('$fullname', '$email', '$age', '$gender', '$ala')";
                 $saada_paring = mysqli_query($yhendus, $lisa_paring);
 
                 $tulemus = mysqli_affected_rows($yhendus);
@@ -35,6 +87,8 @@
                 }
 
              }
+
+          
         ?>
 
 
@@ -46,6 +100,8 @@
             </select>
             <input type="submit" value="otsi...=">
         </form>
+
+      
 
         <table class="table table-striped">
     <tr>
@@ -60,6 +116,27 @@
         <td>kustuta</td>
     </tr>
         <?php
+
+             if (isset($_GET["msg"])){
+                echo "<div class='alert alert-success'>".$_GET["msg"]."</div>";
+            }
+
+
+            if (isset($_GET["kustuta"]) && $_GET["id"]){
+                $id = $_GET["id"];
+                $kustuta_paring = "DELETE FROM spot2025 WHERE id = " .$id."";
+                $saada_paring = mysqli_query($yhendus, $kustuta_paring);
+                $tulemus = mysqli_affected_rows($yhendus);
+                if ($tulemus == 1) {
+                    header("Location: index.php?msg=Rida kustutatud!");
+                } else {
+                    echo "<div class='alert alert-danger'>Andmete kustutamine nurjus!</div>";
+                }
+            }
+
+
+
+
             if (isset($_GET["otsi"]) && !empty($_GET["otsi"])){
                 $s = $_GET["otsi"];
                 echo "Otsing: " .$s;
@@ -85,13 +162,23 @@
             echo "<td>".$rida['gender']."</td>";
             echo "<td>".$rida['category']."</td>";
             echo "<td>".$rida['reg_time']."</td>";
-            echo "<td><a class='btn btn-success' herf='#'>muuda</a></td>";
-            echo "<td><a class='btn btn-warning' herf='#'>muuda</a></td>";
-         
+            echo "<td><a class='btn btn-success' href='?muuda&id=".$rida['id']."'>muuda</a></td>";
+            echo "<td><a class='btn btn-danger' href='?kustuta=jah&id=".$rida['id']."'>kustuta</a></td>";
             echo "</tr>";
             }
+
+
+
+   
+
+      
+
+
+
+            
             
         ?>
+
         </table>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
