@@ -9,4 +9,6 @@ $yhendus = mysqli_connect($db_server, $db_kasutaja, $db_salasona, $db_andmebaas,
     // if(!$yhendus){
     //     die("probleem andmebaasiga!");
     // }
+
+
 ?>
