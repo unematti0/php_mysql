@@ -1,3 +1,4 @@
+<?php include("config.php"); ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,17 +8,58 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
   </head>
   <body>
-    <a href="admin.php" class="btn btn-danger">Admin leht</a>
     <form action="logout.php" method="post">
 	<input type="submit" value="Logi välja" name="logout">
 </form>
     <?php
 session_start();
+echo password_hash("Parool", PASSWORD_DEFAULT);
 if (!isset($_SESSION['tuvastamine'])) {
   header('Location: login.php');
   exit();
   }
   ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="container">
         <h1>HKHK spordipäev 2025</h1>
 

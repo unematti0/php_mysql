@@ -20,6 +20,7 @@
 		//eemaldame kasutaja sisestusest kahtlase pahna
 		$login = htmlspecialchars(trim($_POST['login']));
 		$pass = htmlspecialchars(trim($_POST['pass']));
+		echo $pass;
 		//SIIA UUS KONTROLL
 		
 		
