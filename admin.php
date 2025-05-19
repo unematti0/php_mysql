@@ -13,7 +13,6 @@
 </form>
     <?php
 session_start();
-echo password_hash("Parool", PASSWORD_DEFAULT);
 if (!isset($_SESSION['tuvastamine'])) {
   header('Location: login.php');
   exit();

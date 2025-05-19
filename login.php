@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
   </head>
 <body>
-
 <?php
 	session_start();
 	if (isset($_SESSION['tuvastamine'])) {
@@ -20,11 +19,15 @@
 		//eemaldame kasutaja sisestusest kahtlase pahna
 		$login = htmlspecialchars(trim($_POST['login']));
 		$pass = htmlspecialchars(trim($_POST['pass']));
-		echo $pass;
-		//SIIA UUS KONTROLL
-		
+		$hash = password_hash($pass, PASSWORD_DEFAULT);
 		
 		//kontrollime kas andmebaasis on selline kasutaja ja parool
+		if(password_verify ($pass, $hash)){
+			$pass = $hash;
+		} else {
+			echo "parool vale";
+		}
+
 		$paring = "SELECT * FROM kasutajad WHERE kasutaja='$login' AND parool='$pass'";
 		$valjund = mysqli_query($yhendus, $paring);
 		//kui on, siis loome sessiooni ja suuname
@@ -42,3 +45,4 @@
 	Password: <input type="password" name="pass"><br>
 	<input type="submit" value="Logi sisse">
 </form>
+</body>
