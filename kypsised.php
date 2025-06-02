@@ -1,0 +1,1 @@
+<?php setcookie("nimi", 0); ?>
