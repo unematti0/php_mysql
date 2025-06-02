@@ -16,28 +16,26 @@
 	  }
 	  //kontrollime kas väljad on täidetud
 	if (!empty($_POST['login']) && !empty($_POST['pass'])) {
-		//eemaldame kasutaja sisestusest kahtlase pahna
-		$login = htmlspecialchars(trim($_POST['login']));
-		$pass = htmlspecialchars(trim($_POST['pass']));
-		$hash = password_hash($pass, PASSWORD_DEFAULT);
-		
-		//kontrollime kas andmebaasis on selline kasutaja ja parool
-		if(password_verify ($pass, $hash)){
-			$pass = $hash;
-		} else {
-			echo "parool vale";
-		}
 
-		$paring = "SELECT * FROM kasutajad WHERE kasutaja='$login' AND parool='$pass'";
-		$valjund = mysqli_query($yhendus, $paring);
-		//kui on, siis loome sessiooni ja suuname
-		if (mysqli_num_rows($valjund)==1) {
-			$_SESSION['tuvastamine'] = 'misiganes';
-			header('Location: admin.php');
-		} else {
-			echo "kasutaja või parool on vale";
-		}
-	}
+		
+    $login = htmlspecialchars(trim($_POST['login']));
+    $pass = htmlspecialchars(trim($_POST['pass']));
+
+    // Fetch user by username
+    $paring = "SELECT * FROM kasutajad WHERE kasutaja='$login'";
+    $valjund = mysqli_query($yhendus, $paring);
+
+if ($valjund && mysqli_num_rows($valjund) == 1) {
+    $user = mysqli_fetch_assoc($valjund);
+    if (password_verify($pass, $user['parool'])) {
+        $_SESSION['tuvastamine'] = 'misiganes';
+        header('Location: admin.php');
+        exit();
+    } else {
+        echo "kasutaja või parool on vale";
+    }
+}
+}
 ?>
 <h1>Login</h1>
 <form action="" method="post">
