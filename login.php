@@ -11,29 +11,29 @@
 <?php
 	session_start();
 	if (isset($_SESSION['tuvastamine'])) {
-	  header('Location: admin.php');
-	  exit();
-	  }
+	    header('Location: admin.php');
+	    exit();
+	}
 	  //kontrollime kas väljad on täidetud
 	if (!empty($_POST['login']) && !empty($_POST['pass'])) {
 
 		
-    $login = htmlspecialchars(trim($_POST['login']));
-    $pass = htmlspecialchars(trim($_POST['pass']));
+      $login = htmlspecialchars(trim($_POST['login']));
+      $pass = htmlspecialchars(trim($_POST['pass']));
 
-    // Fetch user by username
-    $paring = "SELECT * FROM kasutajad WHERE kasutaja='$login'";
-    $valjund = mysqli_query($yhendus, $paring);
+      
+      $paring = "SELECT * FROM kasutajad WHERE kasutaja='$login'";
+      $valjund = mysqli_query($yhendus, $paring);
 
 if ($valjund && mysqli_num_rows($valjund) == 1) {
-    $user = mysqli_fetch_assoc($valjund);
+      $user = mysqli_fetch_assoc($valjund);
     if (password_verify($pass, $user['parool'])) {
-        $_SESSION['tuvastamine'] = 'misiganes';
-        header('Location: admin.php');
-        exit();
-    } else {
-        echo "kasutaja või parool on vale";
-    }
+          $_SESSION['tuvastamine'] = 'misiganes';
+          header('Location: admin.php');
+          exit();
+      } else {
+          echo "kasutaja või parool on vale";
+      }
 }
 }
 ?>

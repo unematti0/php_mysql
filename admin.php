@@ -23,42 +23,6 @@ if (!isset($_SESSION['tuvastamine'])) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="container">
         <h1>HKHK spordipäev 2025</h1>
 
