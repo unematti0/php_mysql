@@ -1,4 +1,12 @@
-<?php include("config.php"); ?>
+<?php
+session_start();
+include("config.php");
+// var_dump($_SESSION);
+if (!isset($_SESSION['tuvastamine'])) {
+  header('Location: logout.php');
+  exit();
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,17 +19,6 @@
     <form action="logout.php" method="post">
 	<input type="submit" value="Logi välja" name="logout">
 </form>
-    <?php
-session_start();
-if (!isset($_SESSION['tuvastamine'])) {
-  header('Location: login.php');
-  exit();
-  }
-  ?>
-
-
-
-
 
 <div class="container">
         <h1>HKHK spordipäev 2025</h1>
@@ -49,41 +46,41 @@ if (!isset($_SESSION['tuvastamine'])) {
                     $saada_paring = mysqli_query($yhendus, $muuda_paring);
                     $tulemus = mysqli_affected_rows($yhendus);
                     if ($tulemus == 1) {
-                        header("Location: index.php?msg=andmed muudetud!");
+                        header("Location: admin.php?msg=andmed muudetud!");
                     } else {
                         echo "<div class='alert alert-danger'>andmed ei muutunud</div>";
                     }
 
 
                 }
-    ?>
+?>
 
     
 
      
-        <form action="index.php" method="get" class="py-4">
-            <input type="number" name="id" hidden
-            value="<?php !empty ($rida['id']) ? print_r($rida['id']): ''?>"><br>
-            Nimi: <input type="text" name="fullname" required
-            value="<?php !empty ($rida['fullname']) ? print_r($rida['fullname']): ''?>"><br>
-            E-mail: <input type="email" name="email"
-            value ="<?php !empty ($rida['email']) ? print_r($rida['email']): ''?>"><br>
-            Vanus: <input type="number" name="age" min="16" max="88" step="1"
-            value ="<?php !empty ($rida['age']) ? print_r($rida['age']): ''?>"><br>
-            sugu: <input type="text" name="gender" 
-            value ="<?php !empty ($rida['gender']) ? print_r($rida['gender']): ''?>"><br>
-            spordiala: <input type="text" name="category" 
-            value ="<?php !empty ($rida['category']) ? print_r($rida['category']): ''?>"><br>
-            <?php if (isset($_GET["muuda"]) && isset($_GET["id"])){ ?>
-            <input type="submit" value="salvesta_muudatused" name="salvesta_muudatused" class= "btn btn-success"><br>
-            <?php }else { ?>
-            <input type="submit" value="salvesta" name="salvesta" class="btn btn-primary"><br>
+      
+        <form action="admin.php" method="get">
+            <input type=hidden name="id" value="<?php !empty($rida['id']) ? print_r($rida['id']) : '' ?>" ><br>
+            Nimi: <input type="text" name="full_name" required value="<?php !empty($rida['full_name']) ? print_r($rida['full_name']) : '' ?>" ><br>
+            Email: <input type="email" name="email" required value="<?php !empty($rida['email']) ? print_r($rida['email']) : '' ?>"  ><br>
+            Vanus: <input type="number" name="age" min="16" max="88" step="1" required value="<?php !empty($rida['age']) ? print_r($rida['age']) : '' ?>"  ><br>
+            Sugu: <input type="text" name="gender"  required value="<?php !empty($rida['gender']) ? print_r($rida['gender']) : '' ?>"  ><br>
+            Spordiala: <input type="text" name="category"  required value="<?php !empty($rida['category']) ? print_r($rida['category']) : '' ?>"  ><br>
+            <?php if(isset($_GET["muuda"]) && isset($_GET["id"])){ ?>
+                <input type="submit" value="Salvesta_muudatus" name="salvesta_muudatus" class="btn btn-success"><br>
+            <?php }  else { ?>
+                <input type="submit" value="Salvesta" name="salvesta" class="btn btn-primary"><br>
             <?php } ?>
             
-             
-        </form>
 
-        <?php
+    <!-- $muuda_paring="UPDATE sport2025 SET full_name='Tommy Welbandd',
+    email='uus@sadf.ee',age="11",gender="apach",category="uisutamine" Where id = 3"; -->
+            
+        </form>
+            
+             
+        
+<?php
              if (isset($_GET["salvesta"]) && !empty($_GET["fullname"])){
                 $fullname = $_GET["fullname"];
                 $email = $_GET["email"];
@@ -93,7 +90,7 @@ if (!isset($_SESSION['tuvastamine'])) {
                 $lisa_paring = "INSERT INTO spot2025 (fullname, email, age, gender, category)
                 VALUES ('$fullname', '$email', '$age', '$gender', '$ala')";
                 $saada_paring = mysqli_query($yhendus, $lisa_paring);
-
+                var_dump ($lisa_paring)
                 $tulemus = mysqli_affected_rows($yhendus);
                 if ($tulemus > 0) {
                     echo "<div class='alert alert-success'>Andmed on salvestatud!</div>";
@@ -104,10 +101,10 @@ if (!isset($_SESSION['tuvastamine'])) {
              }
 
           
-        ?>
+?>
 
 
-        <form action="index.php" method="get" class="py-4">
+        <form action="admin.php" method="get" class="py-4">
             <input type="text" name="otsi" >
             <select name="cat">
                 <option value="fullname">Nimi</option>
@@ -143,7 +140,7 @@ if (!isset($_SESSION['tuvastamine'])) {
                 $saada_paring = mysqli_query($yhendus, $kustuta_paring);
                 $tulemus = mysqli_affected_rows($yhendus);
                 if ($tulemus == 1) {
-                    header("Location: index.php?msg=Rida kustutatud!");
+                    header("Location: admin.php?msg=Rida kustutatud!");
                 } else {
                     echo "<div class='alert alert-danger'>Andmete kustutamine nurjus!</div>";
                 }
@@ -246,7 +243,7 @@ if (!isset($_SESSION['tuvastamine'])) {
 
 
             
-        ?>
+?>
 
         </table>
     </div>

@@ -1,4 +1,6 @@
-<?php include('config.php'); ?>
+<?php 
+session_start();
+include('config.php'); ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,7 +11,7 @@
   </head>
 <body>
 <?php
-	session_start();
+	
 	if (isset($_SESSION['tuvastamine'])) {
 	    header('Location: admin.php');
 	    exit();
