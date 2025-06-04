@@ -33,15 +33,15 @@ if (!isset($_SESSION['tuvastamine'])) {
                 }
 
 
-                if (isset($_GET["salvesta_muudatused"]) && isset($_GET["id"])){
+                if (isset($_GET["salvesta_muudatus"]) && isset($_GET["id"])){
                     $id = $_GET["id"];
                     $fullname = $_GET["fullname"];
                     $email = $_GET["email"];
                     $age = $_GET["age"];
                     $gender = $_GET["gender"];
-                    $ala = $_GET["category"];
+                    $category = $_GET["category"];
 
-                    $muuda_paring = "UPDATE spot2025 SET fullname='$fullname', email='$email', age='$age', gender='$gender', category='$ala' WHERE id = " .$id."";
+                    $muuda_paring="UPDATE spot2025 SET fullname='$fullname', email='$email', age='$age', gender='$gender', category='$category' WHERE id = $id";
                     
                     $saada_paring = mysqli_query($yhendus, $muuda_paring);
                     $tulemus = mysqli_affected_rows($yhendus);
@@ -61,7 +61,7 @@ if (!isset($_SESSION['tuvastamine'])) {
       
         <form action="admin.php" method="get">
             <input type=hidden name="id" value="<?php !empty($rida['id']) ? print_r($rida['id']) : '' ?>" ><br>
-            Nimi: <input type="text" name="full_name" required value="<?php !empty($rida['full_name']) ? print_r($rida['full_name']) : '' ?>" ><br>
+            Nimi: <input type="text" name="fullname" required value="<?php !empty($rida['fullname']) ? print_r($rida['fullname']) : '' ?>" ><br>
             Email: <input type="email" name="email" required value="<?php !empty($rida['email']) ? print_r($rida['email']) : '' ?>"  ><br>
             Vanus: <input type="number" name="age" min="16" max="88" step="1" required value="<?php !empty($rida['age']) ? print_r($rida['age']) : '' ?>"  ><br>
             Sugu: <input type="text" name="gender"  required value="<?php !empty($rida['gender']) ? print_r($rida['gender']) : '' ?>"  ><br>
@@ -73,8 +73,7 @@ if (!isset($_SESSION['tuvastamine'])) {
             <?php } ?>
             
 
-    <!-- $muuda_paring="UPDATE sport2025 SET full_name='Tommy Welbandd',
-    email='uus@sadf.ee',age="11",gender="apach",category="uisutamine" Where id = 3"; -->
+   
             
         </form>
             
@@ -86,13 +85,12 @@ if (!isset($_SESSION['tuvastamine'])) {
                 $email = $_GET["email"];
                 $age = $_GET["age"];
                 $gender = $_GET["gender"];
-                $ala = $_GET["category"];
+                $category = $_GET["category"];
                 $lisa_paring = "INSERT INTO spot2025 (fullname, email, age, gender, category)
-                VALUES ('$fullname', '$email', '$age', '$gender', '$ala')";
+                VALUES ('".$fullname."','".$email."','".$age."','".$gender."','".$category."')";
                 $saada_paring = mysqli_query($yhendus, $lisa_paring);
-                var_dump ($lisa_paring)
                 $tulemus = mysqli_affected_rows($yhendus);
-                if ($tulemus > 0) {
+                if ($tulemus == 1) {
                     echo "<div class='alert alert-success'>Andmed on salvestatud!</div>";
                 } else {
                     echo "<div class='alert alert-danger'>Andmete salvestamine nurjus!</div>";
